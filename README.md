@@ -107,7 +107,7 @@ The images mainly contain one person at a time at a close distance.
 Due to this the model does not perform that well on a big crowds at longer distances.
 But even then the model performance reasonable well.
 
-![alt text](https://github.com/Dundoril/mask_scanner/blob/yolov5/inference/output/with_mask_group_of_people.jpg?raw=true)
+![alt text](https://github.com/zeroG-AI-in-Aviation/zero_mask/blob/master/inference/output/with_mask_short_range.jpg?raw=true)
 
 ## Training your own model
 After you tried the provided model, you might find that it does not fit your use case.
