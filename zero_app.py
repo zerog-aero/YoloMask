@@ -82,7 +82,7 @@ def annotate_image():
         options["weights"] = "weights/yolov5l_fm_opt.pt"
         options["source"] = r"dummy.jpg"
         options["output"] = r"/mask_scanner/inference/output"
-        options["output"] = r"inference/output"
+        #options["output"] = r"inference/output"
         options["img_size"] = 480
         options["conf_thres"] = 0.4
         options["iou_thres"] = 0.5
@@ -128,7 +128,7 @@ def annotate_image_demo():
         options["weights"] = "weights/yolov5l_fm_opt.pt"
         options["source"] = r"dummy.jpg"
         options["output"] = r"/mask_scanner/inference/output"
-        options["output"] = r"inference/output"
+        #options["output"] = r"inference/output"
         options["img_size"] = 480
         options["conf_thres"] = 0.4
         options["iou_thres"] = 0.5
