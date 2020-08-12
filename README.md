@@ -5,8 +5,8 @@ Detect Faces with or without mask using yolov5.  [Original Code](https://github.
 # Description: 
 
 
-In times of global pandemics like Corona, automatic systems to detect people wearing masks are getting more and more important.
-Be it for governments who might want to know how many people are actually wearing masks in crowded places like public trains, or businesses who are required  by law to enforce the usage of masks within their facilities. 
+In times of global pandemics like Corona, automatic systems to detect people wearing masks are becoming more and more important.
+Be it for governments who might want to know how many people are actually wearing masks in crowded places like public trains; or businesses who are required  by law to enforce the usage of masks within their facilities. 
 
 This projects aims to provide an easy framework to set up such a mask detection system with minimal effort.
 We provide a pre-trained model trained for people relatively close to the camera which you can use as a quick start option.
