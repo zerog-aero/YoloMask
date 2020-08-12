@@ -82,7 +82,7 @@ This will use the following default values (check out the `detect.py` script to 
 Since "inference/images" is the default input folder, we only have to run `python detect.py` to run inference on all the images in this folder. 
 The results can then be found in `inference/output`
 An example can be found here: 
-![alt text](https://github.com/Dundoril/mask_scanner/blob/yolov5/inference/output/with_mask_short_range.jpg?raw=true)
+![alt text](https://github.com/zeroG-AI-in-Aviation/zero_mask/blob/master/inference/output/with_mask_short_range.jpg)
 It's easy to change the input folder/file and output folder by just running the script with different arguments:
 
 ```shell
