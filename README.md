@@ -44,29 +44,27 @@ But even if your use case is not covered by the pre-trained model, training your
    
    3. Once started, you can send images/video to the docker by using curl in your favourite terminal:
       * curl -X POST http://127.0.0.1:80/annotate_image  --data-binary @"path to the image file" --output "name of the output file"
+      The @ charackter ist important and must be included. This is the command that I run on my local machine:
+      curl -X POST http://127.0.0.1:80/annotate  --data-binary @"C:\Users\U734813\Documents\GitLab\zero_mask\inference\images\with_
       
       The following endpoints are avaliable:
-      * annotate_image: Annotates and draws bounding boxes (shows mask/no mask)
-        - Usage: curl -X POST http://127.0.0.1:80/annotate_image  --data-binary @"path to the image file" --output "name of the output file"
-      * annotate_image_demo: This is demo shows a possible use case. See section "DEMO" for details.
-        - Usage: curl -X POST http://127.0.0.1:80/annotate_image_demo  --data-binary @"path to the image file" --output "name of the output file" 
-	- The Position of the image and the information panel(STOP, HAVE A NICE DAY, COME CLOSER)  can be switched by supplying the paramter "info_screen_small":
-	curl -X POST http://127.0.0.1:80/annotate_image_demo?info_screen_small=False  --data-binary @"path to the image file" --output "name of the output file"
-      * annotate_video:
-      
-      * annotate_video_demo:
-      
-      * curl -X POST http://127.0.0.1:80/annotate_video  --data-binary @"path to the video" --output "name of the output file"
-      
-      The @ charackter ist important and must be included. This is the command that I run on my local machine:
-      curl -X POST http://127.0.0.1:80/annotate  --data-binary @"C:\Users\U734813\Documents\GitLab\zero_mask\inference\images\with_mask_short_range.jpg" --output "test.jpg"
-
-      Its also possible to send parameter 
-
+      * annotate_image: Annotates and draws bounding boxes (shows mask/no mask)      
+       Usage: curl -X POST http://127.0.0.1:80/annotate_image  --data-binary @"path to the image file" --output "name of the output file"
+      * annotate_image_demo: This is demo shows a possible use case. See section "DEMO" for details.  
+       Usage: curl -X POST http://127.0.0.1:80/annotate_image_demo  --data-binary @"path to the image file" --output "name of the output file"  
+       The Position of the image and the information panel(STOP, HAVE A NICE DAY, COME CLOSER)  can be switched by supplying the paramter "info_screen_small":  
+       Usage: curl -X POST http://127.0.0.1:80/annotate_image_demo?info_screen_small=False  --data-binary @"path to the image file" --output "name of the output file"
        
+      * annotate_video: Annotates and draws bounding boxes (shows mask/no mask) for videos   
+       Usage: curl -X POST http://127.0.0.1:80/annotate_video  --data-binary @"path to the video file" --output "name of the output file"
+      
+      * annotate_video_demo: This is demo shows a possible use case. See section "DEMO" for details
+       Usage: curl -X POST http://127.0.0.1:80/annotate_video_demo  --data-binary @"path to the video file" --output "name of the output file"
+       The Position of the image and the information panel (STOP, HAVE A NICE DAY, COME CLOSER)  can be switched by supplying the paramter "info_screen_small":  
+       Usage: curl -X POST http://127.0.0.1:80/annotate_video_demo?info_screen_small=False  --data-binary @"path to the image file" --output "name of the output file"
 
    4. If somethings goes wrong it might be helpful to check the docker log using the following command:
-      docker logs -f "container name" 
+      docker logs -f "container_name" 
 
    5. Finally to stop the running container and (optionally delete it): docker stop  zero_mask_container && docker rm zero_mask_container                                                           
 
