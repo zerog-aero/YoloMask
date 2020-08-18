@@ -54,35 +54,17 @@ app = Flask(__name__)
 # / routes to the default function which returns 'Hello World'
 @app.route('/', methods=['GET'])
 def defaultPage():
-    return Response(response='Hello from Yolov3 inferencing based on ONNX', status=200)
+    return Response(response='Hello from Yolov5 inferencing based on ONNX', status=200)
 
 
-@app.route('/post_video_stream')
-def post_stream():
-    """Video streaming route. Put this in the src attribute of an img tag."""
-    return Response(gen(),
-                    mimetype='multipart/x-mixed-replace; boundary=frame')
-
-
-@app.route('/get_video_stream')
-def get_stream():
-    """Video streaming route. Put this in the src attribute of an img tag."""
-    return Response(gen(),
-                    mimetype='multipart/x-mixed-replace; boundary=frame')
-
-
-
-
-
-#
 @app.route('/annotate_image', methods=['POST'])
 def annotate_image():
     try:
         options = dict()
         options["weights"] = "weights/yolov5l_fm_opt.pt"
         options["source"] = r"dummy.jpg"
-        options["output"] = r"/mask_scanner/inference/output"
-        #options["output"] = r"inference/output"
+        #options["output"] = r"/mask_scanner/inference/output"
+        options["output"] = r"inference/output"
         options["img_size"] = 480
         options["conf_thres"] = 0.4
         options["iou_thres"] = 0.5
@@ -93,8 +75,8 @@ def annotate_image():
         options["classes"] = None
         options["agnostic_nms"] = None
         options["augment"] = None
-        options["include_small_image"] = True
-        options["info_screen_small"] = True
+        #options["include_small_image"] = True
+        #options["info_screen_small"] = True
 
         for entry in request.args:
             convert_to_bool = []
@@ -127,8 +109,8 @@ def annotate_image_demo():
         options = dict()
         options["weights"] = "weights/yolov5l_fm_opt.pt"
         options["source"] = r"dummy.jpg"
-        options["output"] = r"/mask_scanner/inference/output"
-        #options["output"] = r"inference/output"
+        #options["output"] = r"/mask_scanner/inference/output"
+        options["output"] = r"inference/output"
         options["img_size"] = 480
         options["conf_thres"] = 0.4
         options["iou_thres"] = 0.5
@@ -170,15 +152,11 @@ def annotate_image_demo():
 
 @app.route("/annotate_video", methods=['POST'])
 def annotate_video():
-    pass
-
-@app.route("/annotate_video_demo", methods=['POST'])
-def annotate_video_demo():
     try:
         options = dict()
         options["weights"] = "weights/yolov5l_fm_opt.pt"
         options["source"] = r"dummy.mp4"
-        options["output"] = r"/mask_scanner/inference/output"
+        #options["output"] = r"/mask_scanner/inference/output"
         options["output"] = r"inference/output"
         options["img_size"] = 480
         options["conf_thres"] = 0.4
@@ -190,6 +168,53 @@ def annotate_video_demo():
         options["classes"] = None
         options["agnostic_nms"] = None
         options["augment"] = None
+        options["include_small_image"] = True
+        options["info_screen_small"] = True
+
+        for entry in request.args:
+            convert_to_bool = []
+            try:
+                if entry in convert_to_bool:
+                    options[entry] = strtobool(request.args[entry])
+            except:
+                print(f"The following term could not be converted {entry}:{request.args[entry]}")
+
+        imageData = io.BytesIO(request.get_data())
+        imageData.seek(0)
+        print(type(imageData))
+        with open('dummy.mp4', 'wb') as f:
+            shutil.copyfileobj(imageData, f)
+        detect(options)
+
+        file_to_send = f"{options['output']}/dummy.mp4"
+        print("File to send:", {file_to_send})
+        return send_file(file_to_send)
+
+    except Exception as e:
+        traceback.print_exc()
+        logging.exception(f"Exception in annotate(): {str(e)}")
+        return Response(response='Error processing image ' + str(e), status=500)
+
+@app.route("/annotate_video_demo", methods=['POST'])
+def annotate_video_demo():
+    try:
+        options = dict()
+        options["weights"] = "weights/yolov5l_fm_opt.pt"
+        options["source"] = r"dummy.mp4"
+        #options["output"] = r"/mask_scanner/inference/output"
+        options["output"] = r"inference/output"
+        options["img_size"] = 480
+        options["conf_thres"] = 0.4
+        options["iou_thres"] = 0.5
+        options["fourcc"] = "mp4v"
+        options["device"] = ""
+        options["view_img"] = False
+        options["save_txt"] = None
+        options["classes"] = None
+        options["agnostic_nms"] = None
+        options["augment"] = None
+        options["include_small_image"] = True
+        options["info_screen_small"] = True
 
         for entry in request.args:
             convert_to_bool = ["include_small_image","info_screen_small"]
