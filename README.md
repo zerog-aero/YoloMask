@@ -115,7 +115,7 @@ The model was trained on images from a combination of datasets
 
 The images mainly contain one person at a time at a close distance.
 Due to this the model does not perform that well on a big crowds at longer distances.
-But even then the model performance reasonable well.
+But even then the model performs reasonable well.
 
 ![alt text](inference/output/with_mask_short_range.jpg?raw=true)
 
