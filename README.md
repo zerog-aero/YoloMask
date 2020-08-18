@@ -117,7 +117,7 @@ The images mainly contain one person at a time at a close distance.
 Due to this the model does not perform that well on a big crowds at longer distances.
 But even then the model performs reasonable well.
 
-![alt text](inference/output/with_mask_short_range.jpg?raw=true)
+![alt text](inference/output/with_mask_group_of_people.jpg?raw=true)
 
 ## Training your own model
 After you tried the provided model, you might find that it does not fit your use case.
