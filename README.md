@@ -87,8 +87,7 @@ This will use the following default values (check out the `detect.py` script to 
 -  `--weights weights/yolov5l_fm_opt.pt`: The pre-trained model provided with this repository
 -  `--source inference/images`: Path to a folder or filename that you want to run inference on. 
 -  `--output inference/output`: Output folder where the inferred files are stored
--  `--img-size' 480`: TODO
--  `--conf-thres 0.4`: TODO
+-  `--img-size' 480`: The model is trained on an image-size of 480. This is good for close range detection.  If you want to detect people standing further away, then changing this image size to a higher value might work
 
 Since "inference/images" is the default input folder, we only have to run `python detect.py` to run inference on all the images in this folder. 
 The results can then be found in `inference/output`
@@ -97,14 +96,14 @@ An example can be found here:
 It's easy to change the input folder/file and output folder by just running the script with different arguments:
 
 ```shell
-python --source myexamplefolder/images/my_image.jpg --output somefolderpath
+python detect.py --source myexamplefolder/images/my_image.jpg --output somefolderpath
 ```
 
 which runs the inference script for the file named `my_image.jpg` found in `myexamplefolder/images/` and stores the result in `somefolderpath`.
 
 Videos can also be used as input. Just give the source to the video using:
 ```shell
---source myexamplefolder/images/my_video.mp4
+python detect.py  --source myexamplefolder/images/my_video.mp4
 ```
 
 ### Limitations of the Model
