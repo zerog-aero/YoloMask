@@ -5,8 +5,8 @@ Detect Faces with or without mask using yolov5.  [Original Code](https://github.
 # Description: 
 
 
-In times of global pandemics like Corona, automatic systems to detect people wearing masks are getting more and more important.
-Be it for governments who might want to know how many people are actually wearing masks in crowded places like public trains, or businesses who are required  by law to enforce the usage of masks within their facilities. 
+In times of global pandemics like Corona, automatic systems to detect people wearing masks are becoming more and more important.
+Be it for governments who might want to know how many people are actually wearing masks in crowded places like public trains; or businesses who are required  by law to enforce the usage of masks within their facilities. 
 
 This projects aims to provide an easy framework to set up such a mask detection system with minimal effort.
 We provide a pre-trained model trained for people relatively close to the camera which you can use as a quick start option.
@@ -33,27 +33,38 @@ But even if your use case is not covered by the pre-trained model, training your
 2. Docker 
     
    A Docker image is provided that can run inference on single images and videos. Data is pushed into the docker via a RestAPI
-   which runs on port 8000 in the docker.
+   which runs on port 80 in the docker.
 
    1. Building the docker container:
-      docker build . -t "container name":latest    
+      docker build . -t "image_name":latest    
 
    2. Now we have to start the docker:
-      docker run  --name "container name" -p 80:80 -d "name of the docker image"
-      with working cuda: 	docker run --gpus all  --name "container name"  -p 80:80 -d "name of the docker image"
+      docker run  --name "container_name" -p 80:80 -d "image_name"
+      with working cuda: Add the options: --gpus all  
    
    3. Once started, you can send images/video to the docker by using curl in your favourite terminal:
-      * curl -X POST http://127.0.0.1:80/annotate  --data-binary @"path to the image file" --output "name of the output file"
-      * curl -X POST http://127.0.0.1:80/annotate_video  --data-binary @"path to the video" --output "name of the output file"
-
-      Its also possible to send parameter 
-
-       
+      * curl -X POST http://127.0.0.1:80/annotate_image  --data-binary @"path to the image file" --output "name of the output file"
       The @ charackter ist important and must be included. This is the command that I run on my local machine:
-      curl -X POST http://127.0.0.1:80/annotate  --data-binary @"C:\Users\U734813\Documents\GitLab\zero_mask\inference\images\with_mask_short_range.jpg" --output "test.jpg"
+      curl -X POST http://127.0.0.1:80/annotate  --data-binary @"C:\Users\U734813\Documents\GitLab\zero_mask\inference\images\with_
+      
+      The following endpoints are avaliable:
+      * annotate_image: Annotates and draws bounding boxes (shows mask/no mask)      
+       Usage: curl -X POST http://127.0.0.1:80/annotate_image  --data-binary @"path to the image file" --output "name of the output file"
+      * annotate_image_demo: This is demo shows a possible use case. See section "DEMO" for details.  
+       Usage: curl -X POST http://127.0.0.1:80/annotate_image_demo  --data-binary @"path to the image file" --output "name of the output file"  
+       The Position of the image and the information panel(STOP, HAVE A NICE DAY, COME CLOSER)  can be switched by supplying the paramter "info_screen_small":  
+       Usage: curl -X POST http://127.0.0.1:80/annotate_image_demo?info_screen_small=False  --data-binary @"path to the image file" --output "name of the output file"
+       
+      * annotate_video: Annotates and draws bounding boxes (shows mask/no mask) for videos   
+       Usage: curl -X POST http://127.0.0.1:80/annotate_video  --data-binary @"path to the video file" --output "name of the output file"
+      
+      * annotate_video_demo: This is demo shows a possible use case. See section "DEMO" for details
+       Usage: curl -X POST http://127.0.0.1:80/annotate_video_demo  --data-binary @"path to the video file" --output "name of the output file"
+       The Position of the image and the information panel (STOP, HAVE A NICE DAY, COME CLOSER)  can be switched by supplying the paramter "info_screen_small":  
+       Usage: curl -X POST http://127.0.0.1:80/annotate_video_demo?info_screen_small=False  --data-binary @"path to the image file" --output "name of the output file"
 
    4. If somethings goes wrong it might be helpful to check the docker log using the following command:
-      docker logs -f "container name" 
+      docker logs -f "container_name" 
 
    5. Finally to stop the running container and (optionally delete it): docker stop  zero_mask_container && docker rm zero_mask_container                                                           
 
@@ -76,24 +87,23 @@ This will use the following default values (check out the `detect.py` script to 
 -  `--weights weights/yolov5l_fm_opt.pt`: The pre-trained model provided with this repository
 -  `--source inference/images`: Path to a folder or filename that you want to run inference on. 
 -  `--output inference/output`: Output folder where the inferred files are stored
--  `--img-size' 480`: TODO
--  `--conf-thres 0.4`: TODO
+-  `--img-size' 480`: The model is trained on an image-size of 480. This is good for close range detection.  If you want to detect people standing further away, then changing this image size to a higher value might work
 
 Since "inference/images" is the default input folder, we only have to run `python detect.py` to run inference on all the images in this folder. 
 The results can then be found in `inference/output`
 An example can be found here: 
-![alt text](https://github.com/Dundoril/mask_scanner/blob/yolov5/inference/output/with_mask_short_range.jpg?raw=true)
+![alt text](https://github.com/zeroG-AI-in-Aviation/zero_mask/blob/master/inference/output/with_mask_short_range.jpg)
 It's easy to change the input folder/file and output folder by just running the script with different arguments:
 
 ```shell
-python --source myexamplefolder/images/my_image.jpg --output somefolderpath
+python detect.py --source myexamplefolder/images/my_image.jpg --output somefolderpath
 ```
 
 which runs the inference script for the file named `my_image.jpg` found in `myexamplefolder/images/` and stores the result in `somefolderpath`.
 
 Videos can also be used as input. Just give the source to the video using:
 ```shell
---source myexamplefolder/images/my_video.mp4
+python detect.py  --source myexamplefolder/images/my_video.mp4
 ```
 
 ### Limitations of the Model
@@ -107,7 +117,7 @@ The images mainly contain one person at a time at a close distance.
 Due to this the model does not perform that well on a big crowds at longer distances.
 But even then the model performance reasonable well.
 
-![alt text](https://github.com/Dundoril/mask_scanner/blob/yolov5/inference/output/with_mask_group_of_people.jpg?raw=true)
+![alt text](inference/output/with_mask_short_range.jpg?raw=true)
 
 ## Training your own model
 After you tried the provided model, you might find that it does not fit your use case.
