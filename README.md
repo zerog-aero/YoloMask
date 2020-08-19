@@ -43,8 +43,8 @@ But even if your use case is not covered by the pre-trained model, training your
       with working cuda: Add the options: --gpus all  
    
    3. Once started, you can send images/video to the docker by using curl in your favourite terminal:
-      * curl -X POST http://127.0.0.1:80/annotate_image  --data-binary @"path to the image file" --output "name of the output file"
-      The @ charackter ist important and must be included. This is the command that I run on my local machine:
+      * curl -X POST http://127.0.0.1:80/annotate_image  --data-binary @"path to the image file" --output "name of the output file"  
+      The @ charackter ist important and must be included. This is the command that I run on my local machine:  
       curl -X POST http://127.0.0.1:80/annotate  --data-binary @"C:\Users\U734813\Documents\GitLab\zero_mask\inference\images\with_
       
       The following endpoints are avaliable:
