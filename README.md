@@ -45,7 +45,7 @@ But even if your use case is not covered by the pre-trained model, training your
    3. Once started, you can send images/video to the docker by using curl in your favourite terminal:
       * curl -X POST http://127.0.0.1:80/annotate_image  --data-binary @"path to the image file" --output "name of the output file"  
       The @ charackter ist important and must be included. This is the command that I run on my local machine:  
-      curl -X POST http://127.0.0.1:80/annotate  --data-binary @"C:\Users\U734813\Documents\GitLab\zero_mask\inference\images\with_
+      curl -X POST http://127.0.0.1:80/annotate  --data-binary @"C:\Users\U734813\Documents\GitLab\zero_mask\inference\images\with_mask.jpg
       
       The following endpoints are avaliable:
       * annotate_image: Annotates and draws bounding boxes (shows mask/no mask)      
@@ -58,6 +58,10 @@ But even if your use case is not covered by the pre-trained model, training your
 
       *annotate_image_json: Returns a json string containing all recognized elements and their bounding boxes. 
        Usage: curl -X POST http://127.0.0.1:80/annotate_image_json  --data-binary @"path to the image file"
+
+      * annotate_image_json: Returns a json string containing all recognized elements and their bounding boxes.   
+       Usage: curl -X POST http://127.0.0.1:80/annotate_image_json  --data-binary @"path to the image file"
+        
        
       * annotate_video: Annotates and draws bounding boxes (shows mask/no mask) for videos   
        Usage: curl -X POST http://127.0.0.1:80/annotate_video  --data-binary @"path to the video file" --output "name of the output file"
@@ -66,6 +70,11 @@ But even if your use case is not covered by the pre-trained model, training your
        Usage: curl -X POST http://127.0.0.1:80/annotate_video_demo  --data-binary @"path to the video file" --output "name of the output file"
        The Position of the image and the information panel (STOP, HAVE A NICE DAY, COME CLOSER)  can be switched by supplying the paramter "info_screen_small":  
        Usage: curl -X POST http://127.0.0.1:80/annotate_video_demo?info_screen_small=False  --data-binary @"path to the image file" --output "name of the output file"
+       
+       * annotate_video_json: Returns a json string containing all recognized elements and their bounding boxes for each frame  
+       Usage: curl -X POST http://127.0.0.1:80/annotate_video_json  --data-binary @"path to the image file"
+	
+   JSON string format:  
 
       *annotate_video_json: Returns a json string containing all recognized elements and their bounding boxes for each frame
        Usage: curl -X POST http://127.0.0.1:80/annotate_video_json  --data-binary @"path to the image file"	
