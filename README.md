@@ -49,11 +49,15 @@ But even if your use case is not covered by the pre-trained model, training your
       
       The following endpoints are avaliable:
       * annotate_image: Annotates and draws bounding boxes (shows mask/no mask)      
-       Usage: curl -X POST http://127.0.0.1:80/annotate_image  --data-binary @"path to the image file" --output "name of the output file"
+       Usage: curl -X POST http://127.0.0.1:80/annotate_image  --data-binary @"path to the image file" --output "name of the output file"  
+
       * annotate_image_demo: This is demo shows a possible use case. See section "DEMO" for details.  
        Usage: curl -X POST http://127.0.0.1:80/annotate_image_demo  --data-binary @"path to the image file" --output "name of the output file"  
        The Position of the image and the information panel(STOP, HAVE A NICE DAY, COME CLOSER)  can be switched by supplying the paramter "info_screen_small":  
        Usage: curl -X POST http://127.0.0.1:80/annotate_image_demo?info_screen_small=False  --data-binary @"path to the image file" --output "name of the output file"
+
+      *annotate_image_json: Returns a json string containing all recognized elements and their bounding boxes. 
+       Usage: curl -X POST http://127.0.0.1:80/annotate_image_json  --data-binary @"path to the image file"
        
       * annotate_video: Annotates and draws bounding boxes (shows mask/no mask) for videos   
        Usage: curl -X POST http://127.0.0.1:80/annotate_video  --data-binary @"path to the video file" --output "name of the output file"
@@ -62,6 +66,9 @@ But even if your use case is not covered by the pre-trained model, training your
        Usage: curl -X POST http://127.0.0.1:80/annotate_video_demo  --data-binary @"path to the video file" --output "name of the output file"
        The Position of the image and the information panel (STOP, HAVE A NICE DAY, COME CLOSER)  can be switched by supplying the paramter "info_screen_small":  
        Usage: curl -X POST http://127.0.0.1:80/annotate_video_demo?info_screen_small=False  --data-binary @"path to the image file" --output "name of the output file"
+
+      *annotate_video_json: Returns a json string containing all recognized elements and their bounding boxes for each frame
+       Usage: curl -X POST http://127.0.0.1:80/annotate_video_json  --data-binary @"path to the image file"	
 
    4. If somethings goes wrong it might be helpful to check the docker log using the following command:
       docker logs -f "container_name" 

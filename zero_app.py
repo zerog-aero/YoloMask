@@ -13,7 +13,7 @@ from datetime import datetime
 import shutil
 from distutils.util import strtobool
 #import requests
-from zero_mask import detect,detect_demo
+from zero_mask import detect,detect_demo,detect_json
 
 # Imports for the REST API
 from flask import Flask, request, jsonify, Response,send_file
@@ -27,26 +27,26 @@ root.addHandler(handler)
 
 
 
-session = None
-tags = []
 output_dir = 'images'
-
-# Called when the deployed service starts
-def init():
-    if (os.path.exists(output_dir)):
-        print(output_dir + " already exits")
-    else:
-        os.mkdir(output_dir)
+run_local=False
 
 
-def gen():
-   """Video streaming generator function."""
-   vc = cv2.VideoCapture(0)
-   while True:
-       rval, frame = vc.read()
-       cv2.imwrite('pic.jpg', frame)
-       yield (b'--frame\r\n' 
-              b'Content-Type: image/jpeg\r\n\r\n' + open('pic.jpg', 'rb').read() + b'\r\n')
+# # Called when the deployed service starts
+# def init():
+#     if (os.path.exists(output_dir)):
+#         print(output_dir + " already exits")
+#     else:
+#         os.mkdir(output_dir)
+
+
+# def gen():
+#    """Video streaming generator function."""
+#    vc = cv2.VideoCapture(0)
+#    while True:
+#        rval, frame = vc.read()
+#        cv2.imwrite('pic.jpg', frame)
+#        yield (b'--frame\r\n' 
+#               b'Content-Type: image/jpeg\r\n\r\n' + open('pic.jpg', 'rb').read() + b'\r\n')
 
 
 app = Flask(__name__)
@@ -57,14 +57,66 @@ def defaultPage():
     return Response(response='Hello from Yolov5 inferencing based on ONNX', status=200)
 
 
+@app.route('/annotate_image_json', methods=['POST'])
+def annotate_image_json():
+    """
+    Return the results of the inference in form of a json file
+    """
+    try:
+        options = dict()
+        options["weights"] = "weights/yolov5l_fm_opt.pt"
+        options["source"] = r"dummy.jpg"
+        if run_local == True:
+            options["output"] = r"/mask_scanner/inference/output"
+        else:
+            options["output"] = r"inference/output"
+        options["img_size"] = 480
+        options["conf_thres"] = 0.4
+        options["iou_thres"] = 0.5
+        options["fourcc"] = "mp4v"
+        options["device"] = ""
+        options["view_img"] = False
+        options["save_txt"] = None
+        options["classes"] = None
+        options["agnostic_nms"] = None
+        options["augment"] = None
+
+        for entry in request.args:
+            convert_to_bool = []
+            try:
+                if entry in convert_to_bool:
+                    options[entry] = strtobool(request.args[entry])
+            except:
+                print(f"The following term could not be converted {entry}:{request.args[entry]}")
+
+        imageData = io.BytesIO(request.get_data())
+        img = Image.open(imageData)
+        img.save("dummy.jpg")
+
+        inference_dic  = detect_json(options)
+
+        response = app.response_class(
+            response=json.dumps(inference_dic),
+            status=200,
+            mimetype='application/json'
+        )
+        return response
+    except Exception as e:
+        logging.exception(f"Exception in annotate(): {str(e)}")
+        print('EXCEPTION:', str(e))
+        return Response(response='Error processing image', status= 500)
+
+
 @app.route('/annotate_image', methods=['POST'])
 def annotate_image():
     try:
         options = dict()
         options["weights"] = "weights/yolov5l_fm_opt.pt"
         options["source"] = r"dummy.jpg"
-        #options["output"] = r"/mask_scanner/inference/output"
-        options["output"] = r"inference/output"
+        if run_local == True:
+            options["output"] = r"/mask_scanner/inference/output"
+        else:
+            options["output"] = r"inference/output"
         options["img_size"] = 480
         options["conf_thres"] = 0.4
         options["iou_thres"] = 0.5
@@ -109,8 +161,10 @@ def annotate_image_demo():
         options = dict()
         options["weights"] = "weights/yolov5l_fm_opt.pt"
         options["source"] = r"dummy.jpg"
-        #options["output"] = r"/mask_scanner/inference/output"
-        options["output"] = r"inference/output"
+        if run_local == True:
+            options["output"] = r"/mask_scanner/inference/output"
+        else:
+            options["output"] = r"inference/output"
         options["img_size"] = 480
         options["conf_thres"] = 0.4
         options["iou_thres"] = 0.5
@@ -149,6 +203,57 @@ def annotate_image_demo():
         return Response(response='Error processing image', status= 500)
 
 
+@app.route("/annotate_video_json", methods=['POST'])
+def annotate_video_json():
+    try:
+        options = dict()
+        options["weights"] = "weights/yolov5l_fm_opt.pt"
+        options["source"] = r"dummy.mp4"
+        if run_local == True:
+            options["output"] = r"/mask_scanner/inference/output"
+        else:
+            options["output"] = r"inference/output"
+        options["output"] = r"inference/output"
+        options["img_size"] = 480
+        options["conf_thres"] = 0.4
+        options["iou_thres"] = 0.5
+        options["fourcc"] = "mp4v"
+        options["device"] = ""
+        options["view_img"] = False
+        options["save_txt"] = None
+        options["classes"] = None
+        options["agnostic_nms"] = None
+        options["augment"] = None
+        options["include_small_image"] = True
+        options["info_screen_small"] = True
+
+        for entry in request.args:
+            convert_to_bool = []
+            try:
+                if entry in convert_to_bool:
+                    options[entry] = strtobool(request.args[entry])
+            except:
+                print(f"The following term could not be converted {entry}:{request.args[entry]}")
+
+        imageData = io.BytesIO(request.get_data())
+        imageData.seek(0)
+        print(type(imageData))
+        with open('dummy.mp4', 'wb') as f:
+            shutil.copyfileobj(imageData, f)
+        inference_dic  = detect_json(options)
+
+        response = app.response_class(
+            response=json.dumps(inference_dic),
+            status=200,
+            mimetype='application/json'
+        )
+        return response
+
+    except Exception as e:
+        traceback.print_exc()
+        logging.exception(f"Exception in annotate(): {str(e)}")
+        return Response(response='Error processing image ' + str(e), status=500)
+
 
 @app.route("/annotate_video", methods=['POST'])
 def annotate_video():
@@ -156,7 +261,10 @@ def annotate_video():
         options = dict()
         options["weights"] = "weights/yolov5l_fm_opt.pt"
         options["source"] = r"dummy.mp4"
-        #options["output"] = r"/mask_scanner/inference/output"
+        if run_local == True:
+            options["output"] = r"/mask_scanner/inference/output"
+        else:
+            options["output"] = r"inference/output"
         options["output"] = r"inference/output"
         options["img_size"] = 480
         options["conf_thres"] = 0.4
@@ -201,8 +309,10 @@ def annotate_video_demo():
         options = dict()
         options["weights"] = "weights/yolov5l_fm_opt.pt"
         options["source"] = r"dummy.mp4"
-        #options["output"] = r"/mask_scanner/inference/output"
-        options["output"] = r"inference/output"
+        if run_local == True:
+            options["output"] = r"/mask_scanner/inference/output"
+        else:
+            options["output"] = r"inference/output"
         options["img_size"] = 480
         options["conf_thres"] = 0.4
         options["iou_thres"] = 0.5
@@ -243,7 +353,7 @@ def annotate_video_demo():
 
 
 # Load and initialize the model
-init()
+#init()
 
 if __name__ == '__main__':
     # Run the server
