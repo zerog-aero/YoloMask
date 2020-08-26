@@ -56,12 +56,8 @@ But even if your use case is not covered by the pre-trained model, training your
        The Position of the image and the information panel(STOP, HAVE A NICE DAY, COME CLOSER)  can be switched by supplying the paramter "info_screen_small":  
        Usage: curl -X POST http://127.0.0.1:80/annotate_image_demo?info_screen_small=False  --data-binary @"path to the image file" --output "name of the output file"
 
-      *annotate_image_json: Returns a json string containing all recognized elements and their bounding boxes. 
+      * annotate_image_json: Returns a json string containing all recognized elements and their bounding boxes. 
        Usage: curl -X POST http://127.0.0.1:80/annotate_image_json  --data-binary @"path to the image file"
-
-      * annotate_image_json: Returns a json string containing all recognized elements and their bounding boxes.   
-       Usage: curl -X POST http://127.0.0.1:80/annotate_image_json  --data-binary @"path to the image file"
-        
        
       * annotate_video: Annotates and draws bounding boxes (shows mask/no mask) for videos   
        Usage: curl -X POST http://127.0.0.1:80/annotate_video  --data-binary @"path to the video file" --output "name of the output file"
