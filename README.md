@@ -66,14 +66,14 @@ But even if your use case is not covered by the pre-trained model, training your
        
        `curl -X POST http://127.0.0.1:8080/annotate_video_json  --data-binary @"path to the image file"`
 	
-   JSON string format:  The Json is a dictionary. Each entry is a frame in the Video (for an image, the structure is the same, but it includes only one frame)  
-                        The entry contains a list of labels found in the frame which in returns contains:  
-			xywh: []
-			xyxy: Upper left and lower right corner of the bounding box. 
-   			map: 
-   			label: This is other "mask" or "no mask"
-			
-			Example: `{"1": [{"xywh": [0.9088888764381409, 0.36250001192092896, 0.09777777642011642, 0.17166666686534882], "xyxy": [[1548.0, 332.0], [1724.0, 538.0]], "map": 0.8190392851829529, "label": "mask"}]}`
+   4. JSON string format:  
+   The Json is a dictionary. Each entry is a frame in the Video (for an image, the structure is the same, but it includes only one frame) 
+   The entry contains a list of labels found in the frame.
+   The label contains: xywh: [] xyxy: Upper left and lower right corner of the bounding box.
+   And map: label: This is either "mask" or "no mask"
+   Example: 
+   
+   `{"1": [{"xywh": [0.9088888764381409, 0.36250001192092896, 0.09777777642011642, 0.17166666686534882], "xyxy": [[1548.0, 332.0], [1724.0, 538.0]], "map": 0.8190392851829529, "label": "mask"}]}`
 
    4. If somethings goes wrong it might be helpful to check the docker log using the following command:
       
