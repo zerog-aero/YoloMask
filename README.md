@@ -39,7 +39,7 @@ But even if your use case is not covered by the pre-trained model, training your
       docker build . -t zero_face_mask:latest    
 
    2. Now we have to start the docker:
-      docker run --rm -p 80:8080 -d zero_face_mask:latest
+      docker run --rm -p 8080:80 -d zero_face_mask:latest
       with working cuda: Add the options: --gpus all  
    
    3. Once started, you can send images/video to the docker by using curl in your favourite terminal:
