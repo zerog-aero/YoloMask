@@ -51,21 +51,11 @@ But even if your use case is not covered by the pre-trained model, training your
       * annotate_image: Annotates and draws bounding boxes (shows mask/no mask)      
        Usage: curl -X POST http://127.0.0.1:80/annotate_image  --data-binary @"path to the image file" --output "name of the output file"  
 
-      * annotate_image_demo: This is demo shows a possible use case. See section "DEMO" for details.  
-       Usage: curl -X POST http://127.0.0.1:80/annotate_image_demo  --data-binary @"path to the image file" --output "name of the output file"  
-       The Position of the image and the information panel(STOP, HAVE A NICE DAY, COME CLOSER)  can be switched by supplying the paramter "info_screen_small":  
-       Usage: curl -X POST http://127.0.0.1:80/annotate_image_demo?info_screen_small=False  --data-binary @"path to the image file" --output "name of the output file"
-
       * annotate_image_json: Returns a json string containing all recognized elements and their bounding boxes. 
        Usage: curl -X POST http://127.0.0.1:80/annotate_image_json  --data-binary @"path to the image file"
        
       * annotate_video: Annotates and draws bounding boxes (shows mask/no mask) for videos   
        Usage: curl -X POST http://127.0.0.1:80/annotate_video  --data-binary @"path to the video file" --output "name of the output file"
-      
-      * annotate_video_demo: This is demo shows a possible use case. See section "DEMO" for details
-       Usage: curl -X POST http://127.0.0.1:80/annotate_video_demo  --data-binary @"path to the video file" --output "name of the output file"
-       The Position of the image and the information panel (STOP, HAVE A NICE DAY, COME CLOSER)  can be switched by supplying the paramter "info_screen_small":  
-       Usage: curl -X POST http://127.0.0.1:80/annotate_video_demo?info_screen_small=False  --data-binary @"path to the image file" --output "name of the output file"
        
        * annotate_video_json: Returns a json string containing all recognized elements and their bounding boxes for each frame  
        Usage: curl -X POST http://127.0.0.1:80/annotate_video_json  --data-binary @"path to the image file"
@@ -155,7 +145,7 @@ If you are lucky your dataset is already labeled. In this case you just have to 
 
 So what does this actually mean? 
 
--  `0`: This is the object-id defined in "TODO". In our case this would be for example 0 for "person_without_mask" and 1 for "person_with_mask"
+-  `0`: This is the object-id. In our case this would be for example 0 for "person_without_mask" and 1 for "person_with_mask"
 -  `0.2232 0.4654`: This is the center point of the bounding box relative to height and width of the image.
                    For example: The point (0.4 0.6) is located at 40% of the image width and 60% of the image height.
 -  `0.1213 0.2054`: Size if the bounding box, 0.1213 is the width and 0.2054 is the height. Both again are relative to the real image size.
