@@ -36,29 +36,29 @@ But even if your use case is not covered by the pre-trained model, training your
    which runs on port 80 in the docker.
 
    1. Building the docker container:
-      docker build . -t "image_name":latest    
+      docker build . -t zeroFaceMask:latest    
 
    2. Now we have to start the docker:
-      docker run  --name "container_name" -p 80:80 -d "image_name"
+      docker run --rm -p 80:8080 -d zeroFaceMask:latest
       with working cuda: Add the options: --gpus all  
    
    3. Once started, you can send images/video to the docker by using curl in your favourite terminal:
-      * curl -X POST http://127.0.0.1:80/annotate_image  --data-binary @"path to the image file" --output "name of the output file"  
+      * curl -X POST http://127.0.0.1:8080/annotate_image  --data-binary @"path to the image file" --output "name of the output file"  
       The @ charackter ist important and must be included. This is the command that I run on my local machine:  
-      curl -X POST http://127.0.0.1:80/annotate  --data-binary @"C:\Users\U734813\Documents\GitLab\zero_mask\inference\images\with_mask.jpg
+      curl -X POST http://127.0.0.1:8080/annotate  --data-binary @"C:\Users\U734813\Documents\GitLab\zero_mask\inference\images\with_mask.jpg
       
       The following endpoints are avaliable:
       * annotate_image: Annotates and draws bounding boxes (shows mask/no mask)      
-       Usage: curl -X POST http://127.0.0.1:80/annotate_image  --data-binary @"path to the image file" --output "name of the output file"  
+       Usage: curl -X POST http://127.0.0.1:8080/annotate_image  --data-binary @"path to the image file" --output "name of the output file"  
 
       * annotate_image_json: Returns a json string containing all recognized elements and their bounding boxes. 
-       Usage: curl -X POST http://127.0.0.1:80/annotate_image_json  --data-binary @"path to the image file"
+       Usage: curl -X POST http://127.0.0.1:8080/annotate_image_json  --data-binary @"path to the image file"
        
       * annotate_video: Annotates and draws bounding boxes (shows mask/no mask) for videos   
-       Usage: curl -X POST http://127.0.0.1:80/annotate_video  --data-binary @"path to the video file" --output "name of the output file"
+       Usage: curl -X POST http://127.0.0.1:8080/annotate_video  --data-binary @"path to the video file" --output "name of the output file"
        
        * annotate_video_json: Returns a json string containing all recognized elements and their bounding boxes for each frame  
-       Usage: curl -X POST http://127.0.0.1:80/annotate_video_json  --data-binary @"path to the image file"
+       Usage: curl -X POST http://127.0.0.1:8080/annotate_video_json  --data-binary @"path to the image file"
 	
    JSON string format:  The Json is a dictionary. Each entry is a frame in the Video (for an image, the structure is the same, but it includes only one frame)  
                         The entry contains a list of labels found in the frame which in returns contains:  
@@ -69,7 +69,7 @@ But even if your use case is not covered by the pre-trained model, training your
 			Example: {"1": [{"xywh": [0.9088888764381409, 0.36250001192092896, 0.09777777642011642, 0.17166666686534882], "xyxy": [[1548.0, 332.0], [1724.0, 538.0]], "map": 0.8190392851829529, "label": "mask"}]}
 
       *annotate_video_json: Returns a json string containing all recognized elements and their bounding boxes for each frame
-       Usage: curl -X POST http://127.0.0.1:80/annotate_video_json  --data-binary @"path to the image file"	
+       Usage: curl -X POST http://127.0.0.1:8080/annotate_video_json  --data-binary @"path to the image file"	
 
    4. If somethings goes wrong it might be helpful to check the docker log using the following command:
       docker logs -f "container_name" 
