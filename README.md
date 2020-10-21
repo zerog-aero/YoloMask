@@ -1,12 +1,12 @@
-# zeroFaceMask
+# YoloMask
 Detect Faces with or without mask using yolov5.  [Original Code](https://github.com/ultralytics/yolov5)
 
 
 # Description: 
 
 
-In times of global pandemics like Corona, automatic systems to detect people wearing masks are becoming more and more important.
-Be it for governments who might want to know how many people are actually wearing masks in crowded places like public trains; or businesses who are required  by law to enforce the usage of masks within their facilities. 
+Automatic systems to detect people wearing masks are becoming more and more important for public health.
+Be it for governments who might want to know how many people are actually wearing masks in crowded places like public trains; or businesses who are required by law to enforce the usage of masks within their facilities. 
 
 This projects aims to provide an easy framework to set up such a mask detection system with minimal effort.
 We provide a pre-trained model trained for people relatively close to the camera which you can use as a quick start option.
@@ -37,11 +37,11 @@ But even if your use case is not covered by the pre-trained model, training your
 
    1. Building the docker container:
    
-      `docker build . -t zero_face_mask:latest`    
+      `docker build . -t yolomask:latest`    
 
    2. Now we have to start the docker:
       
-      `docker run --rm -p 8080:80 -d zero_face_mask:latest`
+      `docker run --rm -p 8080:80 -d yolomask:latest`
       
       with working cuda: Add the options: --gpus all  
    
@@ -76,11 +76,11 @@ But even if your use case is not covered by the pre-trained model, training your
 
    5. If somethings goes wrong it might be helpful to check the docker log using the following command:
       
-      `docker logs -f "container_name"` 
+      `docker logs -f "<container name>"` 
 
    6. Finally to stop the running container and (optionally delete it): 
    
-      `docker stop  zero_mask_container && docker rm zero_mask_container`                                                           
+      `docker stop <container name> && docker rm <container name>`                                                           
 
 
 # Usage of the library
